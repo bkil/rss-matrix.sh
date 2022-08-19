@@ -134,7 +134,7 @@ rss_html2matrix_format() {
 }
 
 feed_highly_rated_new_posts() {
-  local POSTED NOW MXROOM ID R T C N L P U H USEC AGE
+  local POSTED NOW MXROOM ID R T C N L P U U2 H USEC AGE
   readonly POSTED="$1"
 
   readonly NOW="`date +%s`"
@@ -144,7 +144,9 @@ feed_highly_rated_new_posts() {
     ID="`printf %s "$L" | md5sum | cut -d ' ' -f 1`"
     fgrep -q "$ID" "$POSTED" 2>/dev/null && continue
 
-    USEC="$(date -d "$U" +%s)"
+    # fixup for Busybox ASH
+    U2="`printf %s "$U" | sed 's~Z$~~ ; s~T~ ~g'`"
+    USEC="$(date -d "$U2" +%s)"
     [ -n "$USEC" ] || continue
     AGE="$(((NOW-USEC)/24/3600))"
     if [ "$R" -ge 3 ] && [ "$AGE" -gt 2 ] || [ "$R" -ge 6 ]; then
