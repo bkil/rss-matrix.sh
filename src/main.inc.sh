@@ -146,7 +146,7 @@ feed_highly_rated_new_posts() {
 
     # fixup for Busybox ASH
     U2="`printf %s "$U" | sed 's~Z$~~ ; s~T~ ~g'`"
-    USEC="$(date -d "$U2" +%s)"
+    USEC="$(date -u -d "$U2" +%s)"
     [ -n "$USEC" ] || continue
     AGE="$(((NOW-USEC)/24/3600))"
     if [ "$R" -ge 3 ] && [ "$AGE" -gt 2 ] || [ "$R" -ge 6 ]; then
